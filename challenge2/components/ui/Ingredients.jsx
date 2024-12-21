@@ -49,7 +49,6 @@ export default function IngredientsManager() {
       setShowAddForm(false);
     } catch (error) {
       console.error('Error adding ingredient:', error);
-      // You might want to show an error message to the user here
     }
   };
 

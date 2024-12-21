@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
+import RecipeChatbot from './Chatbot'
 
 export default function MainContent() {
   const [messages, setMessages] = useState([
@@ -54,51 +55,14 @@ export default function MainContent() {
         </button>
       </div>
 
-      {/* Enhanced Chatbot Interface */}
-      <div className="border border-gray-200 rounded-xl mb-8 bg-gray-50 h-96 flex flex-col">
-        {/* Chat Messages Area */}
-        <div className="flex-1 p-4 overflow-y-auto">
-          <div className="space-y-4">
-            {messages.map((message, index) => (
-              <div 
-                key={index} 
-                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
-                <div 
-                  className={`max-w-[80%] p-3 rounded-lg ${
-                    message.role === 'user' 
-                      ? 'bg-emerald-600 text-white rounded-br-none' 
-                      : 'bg-white text-gray-800 rounded-bl-none shadow-sm'
-                  }`}
-                >
-                  {message.content}
-                </div>
-              </div>
-            ))}
-            <div ref={messagesEndRef} />
-          </div>
-        </div>
-
-        {/* Input Area */}
-        <div className="p-4 border-t border-gray-200 bg-white rounded-b-xl">
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-              placeholder="Ask me about recipes, ingredients, or cooking tips..."
-              className="flex-1 p-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-600"
-            />
-            <button
-              onClick={handleSendMessage}
-              className="bg-emerald-600 text-white p-2 rounded-lg hover:bg-emerald-700"
-            >
-              Send
-            </button>
-          </div>
-        </div>
-      </div>
+      {/* Chatbot */}
+      <RecipeChatbot 
+        messages={messages}
+        inputMessage={inputMessage}
+        setInputMessage={setInputMessage}
+        handleSendMessage={handleSendMessage}
+        messagesEndRef={messagesEndRef}
+      />
 
       {/* Personal Meal Plan */}
       <div className="flex justify-between items-center mb-6">
