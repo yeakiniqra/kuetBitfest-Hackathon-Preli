@@ -1,8 +1,6 @@
 'use client'
 
 import React, { useState } from 'react';
-import { IoAdd, IoTrash, IoSearch } from 'react-icons/io5';
-import { MdEdit } from 'react-icons/md';
 
 export default function IngredientsManager() {
   const [ingredients, setIngredients] = useState([
@@ -20,7 +18,7 @@ export default function IngredientsManager() {
   const handleAddIngredient = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/ingredients', {
+      const response = await fetch('/api/itemAdd', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -64,9 +62,8 @@ export default function IngredientsManager() {
         </h1>
         <button
           onClick={() => setShowAddForm(true)}
-          className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 flex items-center gap-2"
+          className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700"
         >
-          <IoAdd size={20} />
           Add Ingredient
         </button>
       </div>
@@ -78,7 +75,6 @@ export default function IngredientsManager() {
           placeholder="Search ingredients..."
           className="w-full p-3 pl-10 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-600"
         />
-        <IoSearch className="absolute left-3 top-3.5 text-gray-400" size={20} />
       </div>
 
       {/* Add Ingredient Form Modal */}
@@ -162,10 +158,10 @@ export default function IngredientsManager() {
               </div>
               <div className="flex gap-2">
                 <button className="text-gray-400 hover:text-emerald-600">
-                  <MdEdit size={20} />
+                  Edit
                 </button>
                 <button className="text-gray-400 hover:text-red-600">
-                  <IoTrash size={20} />
+                  Delete
                 </button>
               </div>
             </div>
