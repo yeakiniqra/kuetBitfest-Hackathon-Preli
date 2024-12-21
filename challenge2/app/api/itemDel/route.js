@@ -1,35 +1,36 @@
 import { NextResponse } from "next/server";
 import { connectToDB } from "../../lib/db";
 import { Ingredients } from "../../lib/models";
-export async function POST(req) {
+export async function DELETE(req) {
   try {
     connectToDB();
     const body = await req.json();
-    const { name, quantity, notes } = body;
+    const { id } = body;
 
     // Validate input
-    if (!name || !quantity) {
+    if (!id) {
       return NextResponse.json(
-        { error: "requires in the request body." },
+        { error: "ID is required for deleting an ingredient." },
         { status: 400 }
       );
     }
 
-    console.log("Received message:", name, quantity, quantity);
+    const deletedIngredient = await Ingredients.findByIdAndDelete(id);
 
-    const newItems = new Ingredients({
-      name,
-      quantity,
-      notes,
-    });
+    if (!deletedIngredient) {
+      return NextResponse.json(
+        { error: "Ingredient not found." },
+        { status: 404 }
+      );
+    }
 
-    await newItems.save();
-    console.log(newItems);
+    console.log("Received message:", id);
 
-    // do anything
+    
 
     return NextResponse.json({
-      data: newItems,
+      message: "Ingredient deleted successfully.",
+      data: deletedIngredient,
     });
   } catch (err) {
     console.error("Error :", err);

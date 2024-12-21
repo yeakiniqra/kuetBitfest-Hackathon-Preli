@@ -1,35 +1,44 @@
 import { NextResponse } from "next/server";
 import { connectToDB } from "../../lib/db";
 import { Ingredients } from "../../lib/models";
-export async function POST(req) {
+export async function PUT(req) {
   try {
     connectToDB();
     const body = await req.json();
-    const { name, quantity, notes } = body;
+    const { id,name, quantity, notes } = body;
 
     // Validate input
-    if (!name || !quantity) {
+    if (!id) {
       return NextResponse.json(
-        { error: "requires in the request body." },
+        { error: "ID is required for updating an ingredient" },
         { status: 400 }
+      );
+    }
+
+    const updateFields = {};
+
+    if (name) updateFields.name = name;
+    if (quantity) updateFields.quantity = quantity;
+    if (notes) updateFields.notes = notes;
+
+    const updatedIngredient = await Ingredients.findByIdAndUpdate(
+      id,
+      updateFields,
+      { new: true }
+    );
+
+    if (!updatedIngredient) {
+      return NextResponse.json(
+        { error: "Ingredient not found." },
+        { status: 404 }
       );
     }
 
     console.log("Received message:", name, quantity, quantity);
 
-    const newItems = new Ingredients({
-      name,
-      quantity,
-      notes,
-    });
-
-    await newItems.save();
-    console.log(newItems);
-
-    // do anything
-
     return NextResponse.json({
-      data: newItems,
+      message: "Ingredient updated successfully.",
+      data: updatedIngredient,
     });
   } catch (err) {
     console.error("Error :", err);
